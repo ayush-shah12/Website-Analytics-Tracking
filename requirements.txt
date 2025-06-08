@@ -1,0 +1,5 @@
+fastapi[standard]
+uvicorn
+mailjet_rest
+logfire
+pytz
