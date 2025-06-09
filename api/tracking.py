@@ -38,12 +38,12 @@ async def log_visit(request: Request):
         formatted_time = now.strftime("%B %d, %Y %I:%M %p %Z")
         
         user = User(
-            ip=request.client.host,
+            # ip=request.client.host,
             user_agent=headers.get("user-agent"),
             referer=headers.get("referer"),
             accept_language=headers.get("accept-language"),
             host=headers.get("host"),
-            forwarded_for=headers.get("x-forwarded-for"),
+            # forwarded_for=headers.get("x-forwarded-for"),
             forwarded_proto=headers.get("x-forwarded-proto"),
             cookies=headers.get("cookie"),
             content_type=headers.get("content-type"),
@@ -53,7 +53,7 @@ async def log_visit(request: Request):
             timestamp=formatted_time
         )
         
-        location_info: Location = get_ip_info(request.client.host)
+        location_info: Location = get_ip_info(headers.get("x-forwarded-for", None))
         
         if location_info:
             user.location = location_info

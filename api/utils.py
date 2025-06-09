@@ -4,6 +4,7 @@ from mailjet_rest import Client
 import os
 import logfire
 import requests
+import ipaddress
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -56,16 +57,34 @@ def email_logged_visitor(user: User):
             """)
 
 
-def get_ip_info(ip: str | None = None) -> Location | None:
+def get_ip_info(ips_list: str | None = None) -> Location | None:
     """
     get location of request
     """
-    try:
+    
+    def _get_public_ip() -> str | None:
+        """trying to get the first public ip"""   
+        ips = [ip.strip() for ip in ips_list.split(',')]
         
-        if not ip:
+        for ip_str in ips:
+            try:
+                ip = ipaddress.ip_address(ip_str)
+                if not (ip.is_private or ip.is_loopback or ip.is_reserved or ip.is_link_local):
+                    return ip_str
+            except ValueError:
+                continue
+        return None
+    
+    try:
+        if not ips_list:
             return None
         
-        response = requests.get(url=f"{location_url}/ip?fields={fields_number}")
+        public_ip = _get_public_ip()
+        
+        if not public_ip:
+            return None
+        
+        response = requests.get(url=f"{location_url}/{public_ip}?fields={fields_number}")
         response.raise_for_status()
         response = response.json()
         location_info: Location = Location(**response)
