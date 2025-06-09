@@ -1,6 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, HttpUrl
 
+
 class Location(BaseModel):
     status: Optional[str] = None
     continent: Optional[str] = None

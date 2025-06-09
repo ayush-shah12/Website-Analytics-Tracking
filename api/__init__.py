@@ -11,14 +11,14 @@ import os
 load_dotenv()
 
 logfire.configure(
-    token=os.environ['LOGFIRE_TOKEN'], 
-    scrubbing=False, 
+    token=os.environ["LOGFIRE_TOKEN"],
+    scrubbing=False,
     environment="production",
-    distributed_tracing=False
+    distributed_tracing=False,
 )
 
 app = FastAPI(title="Personal Site Tracking Pixel", version="1.0.0", openapi_url=None)
-    
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -26,4 +26,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(tracking_router)    
+app.include_router(tracking_router)

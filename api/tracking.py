@@ -1,4 +1,5 @@
 """Tracking Logic"""
+
 from fastapi import APIRouter, Request
 import logfire
 from typing import Any
@@ -29,14 +30,15 @@ SOURCE_LOOKUP: dict[str, Any] = {
 
 router = APIRouter()
 
+
 @router.post("/sddsdax")
 async def log_visit(request: Request):
     try:
         headers = request.headers
-        
+
         now = datetime.now(pytz.timezone("America/New_York"))
         formatted_time = now.strftime("%B %d, %Y %I:%M %p %Z")
-        
+
         user = User(
             # ip=request.client.host,
             user_agent=headers.get("user-agent"),
@@ -50,14 +52,14 @@ async def log_visit(request: Request):
             method=request.method,
             path=request.url.path,
             query_string=request.url.query,
-            timestamp=formatted_time
+            timestamp=formatted_time,
         )
-        
+
         location_info: Location = get_ip_info(headers.get("x-forwarded-for", None))
-        
+
         if location_info:
             user.location = location_info
-        
+
         key = None
         try:
             body_data = await request.json()
@@ -67,9 +69,9 @@ async def log_visit(request: Request):
                 f"""
                 Error trying to get JSON body of request.
                 Error: {e}
-                """)
-            
-        
+                """
+            )
+
         if not key:
             email_logged_visitor(user)
         else:
@@ -78,25 +80,19 @@ async def log_visit(request: Request):
                 user.source = info.get("source", None)
                 user.campaign = info.get("campaign", None)
             email_logged_visitor(user)
-    
+
     except Exception as e:
         logfire.error(
-        f"""
+            f"""
             Error in API Response:
             {e}
-        """)
-    
+        """
+        )
+
     finally:
         logfire.info(
-        f"""
+            f"""
         Logging User Visit:
         {user.model_dump_json(indent=3)}
         """
-    )
-    
-    
-
-        
-        
-    
-    
+        )
