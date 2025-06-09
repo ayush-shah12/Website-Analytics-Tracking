@@ -17,7 +17,7 @@ logfire.configure(
     distributed_tracing=False
 )
 
-app = FastAPI(title="Personal Site Tracking Pixel", version="1.0.0")
+app = FastAPI(title="Personal Site Tracking Pixel", version="1.0.0", openapi_url=None)
     
 app.add_middleware(
     CORSMiddleware,
