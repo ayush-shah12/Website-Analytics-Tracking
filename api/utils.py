@@ -31,10 +31,30 @@ def email_logged_visitor(user: User):
             subject = f"New Site Visitor from {user.source}!"
             body = f"""Received a site visitor from {user.source}!
 Campaign: {user.campaign if user.campaign else 'N/A'}
+Timestamp: {user.timestamp}
+
+Location Info:
+{'-' * 50}
+City: {user.location.city if user.location and user.location.city else 'N/A'}
+Zip: {user.location.postal if user.location and user.location.postal else 'N/A'}
+Country: {user.location.country if user.location and user.location.country else 'N/A'}
+{'-' * 50}
+
+Full User Details:
 {user.model_dump_json()}"""
         else:
             subject = "New Site Visitor!"
             body = f"""Received a site visitor!
+Timestamp: {user.timestamp}
+
+Location Info:
+{'-' * 50}
+City: {user.location.city if user.location and user.location.city else 'N/A'}
+Zip: {user.location.postal if user.location and user.location.postal else 'N/A'}
+Country: {user.location.country if user.location and user.location.country else 'N/A'}
+{'-' * 50}
+
+Full User Details:
 {user.model_dump_json()}"""
 
         data = {
@@ -48,7 +68,7 @@ Campaign: {user.campaign if user.campaign else 'N/A'}
             ]
         }
         result = mailjet.send.create(data=data)
-
+        
         logfire.info(
             f"""
             Mailjet Delivery Status Code: {result.status_code},
