@@ -36,7 +36,7 @@ Timestamp: {user.timestamp}
 Location Info:
 {'-' * 50}
 City: {user.location.city if user.location and user.location.city else 'N/A'}
-Zip: {user.location.postal if user.location and user.location.postal else 'N/A'}
+Zip: {user.location.zip if user.location and user.location.zip else 'N/A'}
 Country: {user.location.country if user.location and user.location.country else 'N/A'}
 {'-' * 50}
 
@@ -50,7 +50,7 @@ Timestamp: {user.timestamp}
 Location Info:
 {'-' * 50}
 City: {user.location.city if user.location and user.location.city else 'N/A'}
-Zip: {user.location.postal if user.location and user.location.postal else 'N/A'}
+Zip: {user.location.zip if user.location and user.location.zip else 'N/A'}
 Country: {user.location.country if user.location and user.location.country else 'N/A'}
 {'-' * 50}
 
