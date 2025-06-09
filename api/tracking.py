@@ -38,7 +38,7 @@ async def log_visit(request: Request):
         formatted_time = now.strftime("%B %d, %Y %I:%M %p %Z")
         
         user = User(
-            # ip=request.client.host,
+            ip=request.client.host,
             user_agent=headers.get("user-agent"),
             referer=headers.get("referer"),
             accept_language=headers.get("accept-language"),
