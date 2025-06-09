@@ -27,7 +27,7 @@ class Location(BaseModel):
 
 
 class User(BaseModel):
-    # ip: Optional[str] = None
+    ip: Optional[str] = None
     user_agent: Optional[str] = None
     referer: Optional[HttpUrl] = None
     accept_language: Optional[str] = None
