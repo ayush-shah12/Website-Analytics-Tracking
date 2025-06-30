@@ -1,11 +1,12 @@
 # 🌐 Personal Website Visitor Tracker
 
-This is a **lightweight**, privacy-conscious FastAPI backend service designed to **log public request metadata** when users visit your personal website. It uses **publicly available information** such as IP and browser headers — no instrumentation, tracking scripts, or invasive analytics.
+This is a **lightweight**, privacy-conscious FastAPI backend service designed to **log public request metadata** when users visit your personal website. It uses **publicly available information** such as *public* IP and browser headers — no instrumentation, tracking scripts, or invasive analytics.
 This was made for me to analyze the sources of traffic (or lack thereof) to my website.
 
 > ⚠️ No Personally Identifiable Information (PII) is stored, tracked, or cross-referenced. This is purely for personal insight and debugging purposes.
 
 ---
+![image](https://github.com/user-attachments/assets/6db97e4c-00c6-45df-8838-cb7c06102e51)
 
 ## 🔧 Features
 
