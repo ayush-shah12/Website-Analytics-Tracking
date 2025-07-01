@@ -28,12 +28,10 @@ class Location(BaseModel):
 
 
 class User(BaseModel):
-    # ip: Optional[str] = None
     user_agent: Optional[str] = None
     referer: Optional[HttpUrl] = None
     accept_language: Optional[str] = None
     host: Optional[str] = None
-    # forwarded_for: Optional[str] = None
     forwarded_proto: Optional[str] = None
     cookies: Optional[str] = None
     content_type: Optional[str] = None

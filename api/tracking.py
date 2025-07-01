@@ -1,13 +1,13 @@
 """Tracking Logic"""
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, BackgroundTasks
 import logfire
 from typing import Any
 from datetime import datetime
 import pytz
 
 from api.models import User, Location
-from api.utils import email_logged_visitor, get_ip_info
+from api.utils import email_logged_visitor, get_ip_info, email_icon_visited
 
 SOURCE_LOOKUP: dict[str, Any] = {
     "ah12dX": {
@@ -32,7 +32,7 @@ router = APIRouter()
 
 
 @router.post("/sddsdax")
-async def log_visit(request: Request):
+async def log_visit(request: Request, background_tasks: BackgroundTasks):
     try:
         headers = request.headers
 
@@ -40,12 +40,10 @@ async def log_visit(request: Request):
         formatted_time = now.strftime("%B %d, %Y %I:%M %p %Z")
 
         user = User(
-            # ip=request.client.host,
             user_agent=headers.get("user-agent"),
             referer=headers.get("referer"),
             accept_language=headers.get("accept-language"),
             host=headers.get("host"),
-            # forwarded_for=headers.get("x-forwarded-for"),
             forwarded_proto=headers.get("x-forwarded-proto"),
             cookies=headers.get("cookie"),
             content_type=headers.get("content-type"),
@@ -73,13 +71,20 @@ async def log_visit(request: Request):
             )
 
         if not key:
-            email_logged_visitor(user)
+            background_tasks.add_task(email_logged_visitor, user)
         else:
             info = SOURCE_LOOKUP.get(key, None)
             if info:
                 user.source = info.get("source", None)
                 user.campaign = info.get("campaign", None)
-            email_logged_visitor(user)
+            background_tasks.add_task(email_logged_visitor, user)
+        
+        background_tasks.add_task(logfire.info, f"""
+        Logging User Visit:
+        {user.model_dump_json(indent=3)}
+        """)
+        
+        return
 
     except Exception as e:
         logfire.error(
@@ -88,11 +93,18 @@ async def log_visit(request: Request):
             {e}
         """
         )
+        return
 
-    finally:
-        logfire.info(
-            f"""
-        Logging User Visit:
-        {user.model_dump_json(indent=3)}
-        """
-        )
+
+@router.post("/sdfc")
+async def log_icon_visit(request: Request, background_tasks: BackgroundTasks):
+    try:
+        body_data = await request.json()
+        key = body_data.get("icon", None)
+        if key:
+            background_tasks.add_task(email_icon_visited, key)
+        
+        return
+    except Exception as e:
+        logfire.error(f"Error in icon visit logging: {e}")
+        return
