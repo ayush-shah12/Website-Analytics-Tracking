@@ -7,8 +7,9 @@ This was made for me to analyze the sources of traffic (or lack thereof) to my w
 
 ---
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/f654ce3f-72cb-468b-9d66-c930bbb93ca1" alt="IMG_9531-portrait" />
+  <img src="https://github.com/user-attachments/assets/ca3dcf68-cbff-4946-bf9c-f1f2782c94da" alt="IMG_9531-portrait" />
 </p>
+
 
 
 ## 🔧 Features
