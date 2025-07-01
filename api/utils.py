@@ -6,7 +6,8 @@ import os
 import logfire
 import requests
 import ipaddress
-import time
+from datetime import datetime
+import pytz
 
 from dotenv import load_dotenv
 
@@ -146,6 +147,10 @@ def email_icon_visited(icon: str):
     Email me when an icon is visited
     """
     try:
+        
+        now = datetime.now(pytz.timezone("America/New_York"))
+        formatted_time = now.strftime("%B %d, %Y %I:%M %p %Z")
+        
         mailjet = Client(auth=(api_key, api_secret), version="v3.1")
 
         subject = f"Icon Visited: {icon}"
@@ -153,7 +158,7 @@ def email_icon_visited(icon: str):
             An icon was visited on your site!
             
             Icon: {icon}
-            Timestamp: {time.time()}
+            Timestamp: {formatted_time}
             
             This is an automated notification from your personal website tracking system.
             """
