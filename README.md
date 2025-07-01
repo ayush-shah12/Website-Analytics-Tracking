@@ -6,13 +6,10 @@ This was made for me to analyze the sources of traffic (or lack thereof) to my w
 > ⚠️ No Personally Identifiable Information (PII) is stored, tracked, or cross-referenced. This is purely for personal insight and debugging purposes.
 
 ---
-![IMG_9531-portrait](https://github.com/user-attachments/assets/2d6df5d1-1808-473e-86cc-890898097a16)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f654ce3f-72cb-468b-9d66-c930bbb93ca1" alt="IMG_9531-portrait" />
+</p>
 
-
-![IMG_9531-left](https://github.com/user-attachments/assets/2139bb38-6160-4e21-b2cd-63c92dbc1bf8)
-
-
-![image](https://github.com/user-attachments/assets/53dfc743-ebfa-4ecb-b42d-ced22ffe4dbb)
 
 ## 🔧 Features
 
