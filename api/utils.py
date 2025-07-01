@@ -6,6 +6,7 @@ import os
 import logfire
 import requests
 import ipaddress
+import time
 
 from dotenv import load_dotenv
 
@@ -29,39 +30,46 @@ def email_logged_visitor(user: User):
         # Customize subject and body based on source
         if user.source:
             subject = f"New Site Visitor from {user.source}!"
-            body = f"""Received a site visitor from {user.source}!
-Campaign: {user.campaign if user.campaign else 'N/A'}
-Timestamp: {user.timestamp}
+            body = f"""
+                Received a site visitor from {user.source}!
+                Campaign: {user.campaign if user.campaign else 'N/A'}
+                Timestamp: {user.timestamp}
 
-Location Info:
-{'-' * 50}
-City: {user.location.city if user.location and user.location.city else 'N/A'}
-Zip: {user.location.zip if user.location and user.location.zip else 'N/A'}
-Country: {user.location.country if user.location and user.location.country else 'N/A'}
-{'-' * 50}
+                Location Info:
+                {'-' * 50}
+                City: {user.location.city if user.location and user.location.city else 'N/A'}
+                Zip: {user.location.zip if user.location and user.location.zip else 'N/A'}
+                Country: {user.location.country if user.location and user.location.country else 'N/A'}
+                {'-' * 50}
 
-Full User Details:
-{user.model_dump_json()}"""
+                Full User Details:
+                {user.model_dump_json()}
+                
+                This is an automated notification from your personal website tracking system.
+                """
         else:
             subject = "New Site Visitor!"
-            body = f"""Received a site visitor!
-Timestamp: {user.timestamp}
+            body = f"""
+                Received a site visitor!
+                Timestamp: {user.timestamp}
 
-Location Info:
-{'-' * 50}
-City: {user.location.city if user.location and user.location.city else 'N/A'}
-Zip: {user.location.zip if user.location and user.location.zip else 'N/A'}
-Country: {user.location.country if user.location and user.location.country else 'N/A'}
-{'-' * 50}
+                Location Info:
+                {'-' * 50}
+                City: {user.location.city if user.location and user.location.city else 'N/A'}
+                Zip: {user.location.zip if user.location and user.location.zip else 'N/A'}
+                Country: {user.location.country if user.location and user.location.country else 'N/A'}
+                {'-' * 50}
 
-Full User Details:
-{user.model_dump_json()}"""
-
+                Full User Details:
+                {user.model_dump_json()}
+                
+                This is an automated notification from your personal website tracking system.
+                """
         data = {
             "Messages": [
                 {
                     "From": {"Email": email, "Name": "Site Visitor Service"},
-                    "To": [{"Email": email, "Name": "Ayush Shah"}],
+                    "To": [{"Email": email, "Name": "Ayush"}],
                     "Subject": subject,
                     "TextPart": body,
                 }
@@ -131,3 +139,47 @@ def get_ip_info(ips_list: str | None = None) -> Location | None:
    			"""
         )
         return None
+
+
+def email_icon_visited(icon: str):
+    """
+    Email me when an icon is visited
+    """
+    try:
+        mailjet = Client(auth=(api_key, api_secret), version="v3.1")
+
+        subject = f"Icon Visited: {icon}"
+        body = f"""
+            An icon was visited on your site!
+            
+            Icon: {icon}
+            Timestamp: {time.time()}
+            
+            This is an automated notification from your personal website tracking system.
+            """
+        
+        data = {
+            "Messages": [
+                {
+                    "From": {"Email": email, "Name": "Site Visitor Service"},
+                    "To": [{"Email": email, "Name": "Ayush"}],
+                    "Subject": subject,
+                    "TextPart": body,
+                }
+            ]
+        }
+        result = mailjet.send.create(data=data)
+        
+        logfire.info(
+            f"""
+            Icon Visit Email - Mailjet Delivery Status Code: {result.status_code},
+            Mailjet Response JSON: {result.json()}
+            """
+        )
+    except Exception as e:
+        logfire.error(
+            f"""
+            Error in Icon Visit Email Delivery. 
+            Error: {e}
+            """
+        )
